@@ -19,6 +19,9 @@ A Lua module for openresty to send metrics to StatsD
 ```
     # an nginx conf
     http {
+      -- optionally set relative lua_package_path
+      lua_package_path "${prefix}lua/*.lua";
+      
       -- make the statsd variable available in each phase
       init_by_lua 'statsd = require("statsd")';
 
@@ -32,7 +35,7 @@ A Lua module for openresty to send metrics to StatsD
         log_by_lua '
           -- this is the phase where metrics are registered
           statsd.incr("test.status." .. ngx.var.status)
-          stasts.time("test.req_time", ngx.now() - ngx.req.start_time())
+          statsd.time("test.req_time", ngx.now() - ngx.req.start_time())
         ';
       }
     }
